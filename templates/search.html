@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Search</title>
+    </head>
+    <body>
+	<p>{{ restuRand.item_name|e }} </p>
+	<ol>
+		{% for branch in restuLocation %}
+			<li>
+			{% for key, value in branch.iteritems() %}
+			<p> {{key|e}} : {{ value|e }} <p>
+			{% endfor %}
+			</li>
+		{% endfor %}
+	</ol>
+        <!--Page content-->
+    </body>
+</html>
