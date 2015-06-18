@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>City</title>
+    </head>
+    <body>
+	<form action="/search" method="post">
+		City*: <select name="user_city" id="user_city">
+		{% for city in cities %}
+			<option value="{{ city.city_id }}"  required>{{city.name}} </option>
+		{% endfor %}
+		</select>
+
+		</br>	
+		 <button type="submit">Randomize</button>
+	</form>
+
+    </body>
+</html>
