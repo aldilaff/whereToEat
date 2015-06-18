@@ -3,8 +3,12 @@ from flask import Flask,  render_template, request
 import requests
 import random
 from qaym import keyCode
+from flask_googlemaps import GoogleMaps
+from flask_googlemaps import Map
+
 app = Flask(__name__)
 app.config["DEBUG"] = True  # Only include this while you are testing your app
+GoogleMaps(app)
 
 @app.route("/")
 def index():
@@ -42,8 +46,10 @@ def city():
 @app.route("/search", methods=["GET", "POST"])
 def search():
     if request.method == "POST":
-        restuName = "http://api.qaym.com/0.1/cities/" + request.form["user_city"]+ "/items/key="+keyCode
-        restu = requests.get(restuName).json()
+        cityInfoAPIRequest = "http://api.qaym.com/0.1/cities/" + request.form["user_city"]+ "/key="+keyCode
+        cityInfo = requests.get(cityInfoAPIRequest).json()
+        resturantListInThisCityAPIRequest = "http://api.qaym.com/0.1/cities/" + request.form["user_city"]+ "/items/key="+keyCode
+        restu = requests.get(resturantListInThisCityAPIRequest).json()
         if restu==False:
             print("restu is False")
             return page_not_found(restu)
@@ -56,6 +62,7 @@ def search():
         restuLocation = "http://api.qaym.com/0.1/items/"+ restuRand["item_id"] +"/locations/key="+keyCode
         restuLocation = requests.get(restuLocation).json()
         restuListInThisCity = []
+        listOfLocations = []
         for resturant in restuLocation:
             print("jowiejfaoiwej")
             print resturant
@@ -65,10 +72,19 @@ def search():
                 print("added resturant:")
                 print resturant
                 restuListInThisCity.append(resturant)
+                location = (resturant["latitude"],resturant["longitude"])
+                listOfLocations.append(location)
             else:
                 print("deleted a resturant")
         print restuLocation
-        return render_template("search.html", restuRand = restuRand,restuLocation=restuListInThisCity)
+        # mymap = Map(
+        #         identifier="view-side",
+        #         lat=37.4419,
+        #         lng=-122.1419,
+        #         markers=[(37.4419, -122.1419)]
+        #     )
+        mapOfBranches = Map(identifier="resturantBranchesMap", lat=cityInfo["latitude"], lng=cityInfo["longitude"],markers=listOfLocations,zoom=cityInfo["zoom"])
+        return render_template("search.html", restuRand = restuRand,restuLocation=restuListInThisCity, mapOfBranches=mapOfBranches)
     else:
         return render_template("search.html")
 

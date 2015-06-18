@@ -3,9 +3,11 @@
     <head>
         <meta charset="utf-8">
         <title>Search</title>
+        {{mapOfBranches.js}}
     </head>
     <body>
 	<p>{{ restuRand.item_name|e }} </p>
+	{{mapOfBranches.html}}
 	<ol>
 		{% for branch in restuLocation %}
 			<li>
