@@ -7,6 +7,12 @@
     </head>
     <body>
 	<p>{{ restuRand.item_name|e }} </p>
+	
+	{%for key, value in restuInfo.iteritems() %}
+		<p> {{key|e}} : {{value|e}}
+	{% endfor %}
+
+
 	{{mapOfBranches.html}}
 	<ol>
 		{% for branch in restuLocation %}
